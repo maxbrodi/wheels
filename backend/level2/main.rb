@@ -39,11 +39,11 @@ rentals.each do |rental|
   if number_of_days == 1
     price_for_dates = default_price
   elsif number_of_days < 4
-    price_for_dates = default_price + (default_price * (number_of_days - 1) * 0.9)
+    price_for_dates = default_price * (1 + ((number_of_days - 1) * 0.9))
   elsif number_of_days < 10
-    price_for_dates = default_price + (default_price * 3 * 0.9) + (default_price * (number_of_days - 3) * 0.7)
+    price_for_dates = default_price * (1 + (3 * 0.9) + ((number_of_days - 3) * 0.7))
   else
-    price_for_dates = default_price + (default_price * 3 * 0.9) + (default_price * 6 * 0.7) + (default_price * (number_of_days - 10) * 0.5)
+    price_for_dates = default_price * (1 + (3 * 0.9) + (6 * 0.7) + ((number_of_days - 10) * 0.5))
   end
 
   # price per km
