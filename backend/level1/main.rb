@@ -20,7 +20,7 @@ rentals.each do |rental|
   start_date = rental["start_date"]
   end_date = rental["end_date"]
 
-  number_of_days = [Date.parse(end_date).mjd - Date.parse(start_date).mjd, 1].max
+  number_of_days = 1 + Date.parse(end_date).mjd - Date.parse(start_date).mjd
 
   # other variables useful for price computation
 
