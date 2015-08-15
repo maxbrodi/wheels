@@ -80,41 +80,27 @@ rentals.each do |rental|
 
   actions = []
 
-  driver_action = {}
-  driver_action["who"] = "driver"
-  driver_action["type"] = "debit"
-  driver_action["amount"] = price_before_deductible + deductible_fee
+  bank = {}
 
-  actions << driver_action
+  bank["driver"] = price_before_deductible + deductible_fee
+  bank["owner"] = price_before_deductible - global_fee
+  bank["insurance"] = insurance_fee
+  bank["assistance"] = assistance_fee
+  bank["drivy"] = drivy_fee + deductible_fee
 
-  owner_action = {}
-  owner_action["who"] = "owner"
-  owner_action["type"] = "credit"
-  owner_action["amount"] = price_before_deductible - global_fee
+  bank.each do |stakeholder, money|
+    stakeholder_action = {}
+    stakeholder_action["who"] = stakeholder
+    if stakeholder == "driver"
+      stakeholder_action["type"] = "debit"
+    else
+      stakeholder_action["type"] = "credit"
+    end
+    stakeholder_action["amount"] = money
 
-  actions << owner_action
+    actions << stakeholder_action
 
-  insurance_action = {}
-  insurance_action["who"] = "insurance"
-  insurance_action["type"] = "credit"
-  insurance_action["amount"] = insurance_fee
-
-  actions << insurance_action
-
-  assistance_action = {}
-  assistance_action["who"] = "assistance"
-  assistance_action["type"] = "credit"
-  assistance_action["amount"] = assistance_fee
-
-  actions << assistance_action
-
-
-  drivy_action = {}
-  drivy_action["who"] = "drivy"
-  drivy_action["type"] = "credit"
-  drivy_action["amount"] = drivy_fee + deductible_fee
-
-  actions << drivy_action
+  end
 
   rental_output["actions"] = actions
 
