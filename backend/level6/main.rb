@@ -39,12 +39,10 @@ transactions.each do |old_transaction|
           if old_action["who"] == new_action["who"]
             if new_action["who"] == "driver"
               new_action["amount"] = old_action["amount"] - new_action["amount"]
-              p "DRIVER"
             else
               new_action["amount"] = new_action["amount"] - old_action["amount"]
             end
             # change debit/credit according to new amount
-            p new_action["amount"]
             if new_action["amount"] < 0
               new_action["type"] = "debit"
             else
@@ -54,9 +52,19 @@ transactions.each do |old_transaction|
           end
         end
       end
+    new_transaction["rental_id"] = new_transaction["id"]
     end
   end
 end
+
+# restart ids for rental modifcations hashes
+
+counter = 1
+new_transactions.each do |new_transaction|
+  new_transaction["id"] = counter
+  counter += 1
+end
+
 
 # write output to new JSON file
 
