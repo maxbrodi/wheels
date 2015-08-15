@@ -99,3 +99,56 @@ def compute_transactions(cars, rentals)
 
   return output_array
 end
+
+def change_booking(rentals, rental_modifications)
+  new_rentals = []
+
+  rental_modifications.each do |modification|
+    rental_to_change = rentals[modification["rental_id"] - 1]
+
+    rental_to_change["start_date"] = modification["start_date"] if modification["start_date"]
+    rental_to_change["end_date"] = modification["end_date"] if modification["end_date"]
+    rental_to_change["distance"] = modification["distance"] if modification["distance"]
+
+    new_rentals << rental_to_change
+  end
+  return new_rentals
+end
+
+def compute_deltas(old_transactions, new_transactions)
+  old_transactions.each do |old_transaction|
+  new_transactions.each do |new_transaction|
+
+    if old_transaction["id"] == new_transaction["id"]
+      # computing deltas
+      old_transaction["actions"].each do |old_action|
+        new_transaction["actions"].each do |new_action|
+          if old_action["who"] == new_action["who"]
+            if new_action["who"] == "driver"
+              new_action["amount"] = old_action["amount"] - new_action["amount"]
+            else
+              new_action["amount"] = new_action["amount"] - old_action["amount"]
+            end
+            # change debit/credit according to new amount
+            if new_action["amount"] < 0
+              new_action["type"] = "debit"
+            else
+              new_action["type"] = "credit"
+            end
+            new_action["amount"] = new_action["amount"].abs
+          end
+        end
+      end
+    new_transaction["rental_id"] = new_transaction["id"]
+    end
+  end
+end
+
+# restart ids for rental modifcations hashes
+
+counter = 1
+new_transactions.each do |new_transaction|
+  new_transaction["id"] = counter
+  counter += 1
+end
+end
